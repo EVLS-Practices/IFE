@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>IFE JavaScript Task 15</title>
+<style>
+:root {
+  --green: #2dad3d;
+  --yellow: #c6a543;
+  --red: #e23a3a;
+}
+
+*, *:before, *:after {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  font-family: sans-serif;
+}
+
+b {
+  color: #000;
+  background-color: #c6a543;
+}
+
+/*select, input, button {*/
+/*  padding: .5rem;*/
+/*  margin-left: 10px;*/
+/*}*/
+
+textarea {
+  resize: none;
+}
+
+button {
+  background-color: #ccc;
+  border: 0;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #aaa;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+td {
+  font-size: .9rem;
+  padding: 5px;
+  border-right: 1px solid #aaa;
+  border-bottom: 1px solid #aaa;
+}
+
+tr td:last-of-type {
+  border-right: 0;
+}
+
+fieldset {
+  margin: 0;
+  padding: 1em;
+  height: 100%;
+}
+
+input {
+  outline: 0;
+  border: 0;
+}
+
+.w-full {
+  width: 100%;
+}
+
+#root {
+  height: 80vh;
+  user-select: none;
+  overflow: auto;
+  margin: 0 auto;
+  border: 0;
+  display: flex;
+  flex-direction: row;
+  padding: 15px;
+  align-items: center;
+  justify-content: center;
+}
+
+#controlsGroup {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+}
+
+.space {
+  margin: .4rem;
+  margin-left: 10px;
+}
+
+.formGroup fieldset > * {
+  margin-top: 1em;
+}
+
+.formGroup fieldset > *:first-child {
+  margin-top: 0;
+}
+
+.formGroup input,
+.formGroup button {
+  font-size: 1rem;
+  padding: .5em;
+}
+
+.formInput {
+  border: 1px solid #ccc;
+}
+
+.formControl.valid .formInput,
+.formControl.invalid .formInput {
+  margin-bottom: 5px;
+}
+
+.formControl .formInput.dirty {
+  border-color: var(--green);
+}
+
+.formControl.invalid .formInput.dirty {
+  border-color: var(--red);
+}
+
+.validationMsg {
+  display: none;
+}
+
+.formControl.touched .validationMsg {
+  display: block;
+}
+
+.formControl.valid .validationMsg {
+  color: var(--green);
+}
+
+.formControl.invalid .validationMsg {
+  color: var(--red);
+}
+
+#form, #formState {
+  width: 500px;
+  height: 100%;
+}
+
+</style>
+</head>
+<body>
+<div id="root">
+  <pre id="formState"></pre>
+  <form id="form" class="formGroup">
+    <fieldset>
+      <div class="formControl">
+        <label>
+          昵称 (onBlur)
+          <input name="nickname" class="formInput w-full" />
+        </label>
+      </div>
+      <div class="formControl">
+        城市 (onChange)
+        <select name="city" class="formInput w-full">
+          <option>深圳</option>
+          <option>广州</option>
+          <option>上海</option>
+          <option>北京</option>
+        </select>
+      </div>
+      <div class="formControl">
+        性别 (onChange)
+        <label>
+          男
+          <input type="radio" name="gender" value="male">
+        </label>
+        <label>
+          女
+          <input type="radio" name="gender" value="female">
+        </label>
+      </div>
+      <div class="formControl">
+        <label>
+          年龄 (onChange)
+          <input type="text" name="age" class="formInput">
+        </label>
+      </div>
+      <div class="formControl">
+        爱好 (onChange)
+        <label><input type="checkbox" name="hobby" value="movie">电影</label>
+        <label><input type="checkbox" name="hobby" value="music">音乐</label>
+        <label><input type="checkbox" name="hobby" value="sport">运动</label>
+      </div>
+      <button class="w-full" type="submit">验证</button>
+    </fieldset>
+  </form>
+</div>
+<script type="module" src="main.js"></script>
+</body>
+</html>

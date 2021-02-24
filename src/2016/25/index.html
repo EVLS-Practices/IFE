@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>IFE JavaScript Task 12</title>
+    <style>
+*, *:before, *:after {
+  box-sizing: border-box;
+}
+html, body {
+  margin: 0;
+  font-family: sans-serif;
+}
+#root {
+  height: 80vh;
+  user-select: none;
+  overflow: auto;
+  margin: 0 auto;
+  border: 0;
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
+}
+#root:after {
+  content: '';
+  padding: 7.5px;
+}
+
+.tree {
+  position: relative;
+  flex-shrink: 0;
+  width: 100%;
+  font-size: 1.3rem;
+  cursor: pointer;
+  background-color: #fff;
+  color: #000;
+}
+.tree.fold > .tree {
+  display: none;
+}
+.tree.fold span:after {
+  content: '...'
+}
+
+.tree.hi > span {
+  background-color: #4966b9;
+  color: #fff;
+}
+.tree .tree:before,
+.tree .tree span:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(var(--pd) - 12px);
+  z-index: 1;
+  background-color: #000;
+}
+.tree .tree:before {
+  width: 1px;
+}
+.tree .tree span:before {
+  margin-top: auto;
+  margin-bottom: auto;
+  height: 1px;
+  width: 8px;
+}
+
+.tree span {
+  position: relative;
+  display: block;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: var(--pd);
+  width: 100%;
+  background-color: #ccc;
+  margin-bottom: 3px;
+  border-radius: 2px;
+}
+
+b {
+  color: #000;
+  background-color: #c6a543;
+}
+
+#controlsGroup {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+}
+
+.space {
+  margin: .4rem;
+  margin-left: 10px;
+}
+
+select, input, button {
+  margin: 3px;
+  padding: .5rem;
+}
+
+textarea {
+  resize: none;
+}
+
+.btnGroup {
+  margin-left: 1em;
+}
+
+button {
+  background-color: #ccc;
+  border: 0;
+  border-radius: 3px;
+  cursor: pointer;
+}
+button:hover {
+  background-color: #aaa;
+}
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <div id="controlsGroup"></div>
+    <script src="task.js"></script>
+  </body>
+</html>

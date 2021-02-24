@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>IFE JavaScript Task 13</title>
+    <style>
+*, *:before, *:after {
+  box-sizing: border-box;
+}
+html, body {
+  margin: 0;
+  font-family: sans-serif;
+}
+#root {
+  height: 80vh;
+  user-select: none;
+  overflow: auto;
+  margin: 0 auto;
+  border: 0;
+  display: flex;
+  flex-direction: row;
+  padding: 15px;
+}
+
+b {
+  color: #000;
+  background-color: #c6a543;
+}
+
+#controlsGroup {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+}
+
+.space {
+  margin: .4rem;
+  margin-left: 10px;
+}
+
+select, input, button {
+  padding: .5rem;
+  margin-left: 10px;
+}
+
+textarea {
+  resize: none;
+}
+
+button {
+  background-color: #ccc;
+  border: 0;
+  border-radius: 3px;
+  cursor: pointer;
+}
+button:hover {
+  background-color: #aaa;
+}
+#monitor {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.orbitContainer {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.orbit {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid #ccc;
+}
+
+.spacecraftContainer {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.spacecraft {
+  position: absolute;
+  width: 36px;
+  height: 36px;
+  top: 100%;
+  margin-top: -18px;
+  transform: rotate(-90deg);
+}
+
+.spacecraft .energy {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 5px;
+  margin-top: -5px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.energy.green {
+  background-color: #2dad3d;
+}
+.energy.yellow {
+  background-color: #c6a543;
+}
+.energy.red {
+  background-color: #e23a3a;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+#console {
+  width: 400px;
+  height: 100%;
+  border: 1px solid #aaa;
+  overflow: auto;
+  white-space: unset;
+  line-height: 1.5;
+}
+#console > div {
+  padding: 5px;
+  border-bottom: 1px solid #aaa;
+  word-break: break-word;
+}
+#console .warn {
+  background-color: #d7bc93;
+}
+#console .error {
+  background-color: #f19393;
+}
+    </style>
+  </head>
+  <body>
+    <div id="root">
+      <pre id="console"></pre>
+      <div id="monitor"></div>
+    </div>
+    <div id="controlsGroup"></div>
+    <script type="module" src="main.js"></script>
+  </body>
+</html>

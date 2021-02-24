@@ -1,0 +1,47 @@
+<!doctype html>
+<html class="no-js" lang="">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>三栏式布局</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+.parent {
+  background-color: #eee;
+}
+.parent:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+.box {
+  background-color: #fff;
+}
+.left, .right {
+  width: 200px;
+  height: 200px;
+}
+.left {
+  margin-left: -100%;
+}
+.right {
+  margin-left: -200px;
+}
+.middle {
+  margin-left: 200px;
+  margin-right: 200px;
+}
+.left, .middle, .right {
+  float: left;
+}
+  </style>
+</head>
+<body>
+  <div class="parent">
+    <div class="middle">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</div>
+    <div class="left">LFET</div>
+    <div class="right">RIGHT</div>
+  </div>
+</body>
+</html>

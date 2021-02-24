@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>IFE JavaScript Task 06</title>
+    <style>
+#queue {
+  margin: 1rem;
+  display: flex;
+  flex-direction: row;
+  flex-shrink: 0;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.item {
+  font-size: 1rem;
+  margin-left: 15px;
+  padding: 15px;
+  background-color: #000;
+  color: #fff;
+}
+
+#controlsGroup {
+  display:flex;
+  flex-shrink:0;
+  align-items:center;
+}
+
+input, button {
+  padding: .5rem;
+  margin: .3rem;
+}
+
+button {
+  background-color: #ccc;
+  border: 0;
+  border-radius: 3px;
+  cursor: pointer;
+}
+button:hover {
+  background-color: #aaa;
+}
+    </style>
+  </head>
+  <body>
+    <div id="queue"></div>
+    <div id="controlsGroup">
+      <input id="input" type="number"/>
+      <button id="leftIn">Left in</button>
+      <button id="rightIn">Right in</button>
+      <button id="leftOut">Left out</button>
+      <button id="rightOut">Right out</button>
+    </div>
+    <script src="task.js"></script>
+  </body>
+</html>

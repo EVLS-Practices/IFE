@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>IFE JavaScript Task 07</title>
+    <style>
+#queue {
+  height: 80vh;
+  margin: 1rem;
+  padding-left: 5px;
+  padding-right: 5px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-end;
+  border: 1px solid #000;
+  user-select: none;
+  overflow: auto;
+}
+
+.item {
+  flex-shrink: 0;
+  position: relative;
+  font-size: 1rem;
+  margin-left: 15px;
+  width: 30px;
+  cursor: pointer;
+}
+.item:first-of-type {
+  margin: 0;
+}
+.item:hover {
+  background-color: #9c5858 !important;
+}
+.item:before {
+  content: attr(title);
+  font-size: .8rem;
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  right: 0;
+  text-align: center;
+  color: #000;
+}
+
+#controlsGroup {
+  display:flex;
+  flex-shrink:0;
+  align-items:center;
+  justify-content:center;
+}
+
+input, button {
+  padding: .5rem;
+  margin: .3rem;
+}
+
+button {
+  background-color: #ccc;
+  border: 0;
+  border-radius: 3px;
+  cursor: pointer;
+}
+button:hover {
+  background-color: #aaa;
+}
+    </style>
+  </head>
+  <body>
+    <div id="queue"></div>
+    <div id="controlsGroup">
+      <input id="input" type="number"/>
+      <button id="leftIn">Left in</button>
+      <button id="rightIn">Right in</button>
+      <button id="leftOut">Left out</button>
+      <button id="rightOut">Right out</button>
+      <button id="sort">Sort</button>
+      <button id="random">Generate random numbers</button>
+      <button id="empty">Empty</button>
+    </div>
+    <script src="task.js"></script>
+  </body>
+</html>
