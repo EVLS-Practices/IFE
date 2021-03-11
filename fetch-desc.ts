@@ -29,8 +29,8 @@ async function getDesc (year: number, taskId: number, outDir: string, retry = 3)
       content     = content.replace(/<a[\s\S]*?>/g, "").replace(/<\/a>/g, "")
       fs.writeFileSync(Path.join(outDir, "README.md"), [
         title,
-        `url: [url](${url})\n`,
-        `demo: [在线演示](https://evls-practices.github.io/IFE/src/${year}/${taskId}/index.html)`,
+        `## demo: [在线演示](https://evls-practices.github.io/IFE/src/${year}/${taskId}/index.html)`,
+        `[IFE 链接](${url})\n`,
         content,
       ].join("\n"))
     }
