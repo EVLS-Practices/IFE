@@ -1,17 +1,67 @@
 const $ = str => document.getElementById(str)
-const $c = (c, t = "div") => {
-  const res = document.createElement(t)
-  res.title = c
-  res.className = "item"
-  res.style.height = `calc(${c}% - 20px)`
-  const cc = (1 - c / 100) * 200
-  res.style.backgroundColor = `rgb(${cc}, ${cc}, ${cc})`
+const isNil = any => typeof any === "undefined" || any === null
+
+function createElement(type, props, ...children) {
+  const isFrag = type === "frag"
+  const res = isFrag ? document.createDocumentFragment(): document.createElement(type)
+  if (!isFrag && props) applyPropsToElement(res, props)
+  for (const child of children) {
+    if (isNil(child)) continue
+    switch (typeof child) {
+      case "string":
+      case "number":
+      case "boolean":
+        res.appendChild(document.createTextNode(child))
+        break
+      default:
+        res.appendChild(child)
+    }
+  }
   return res
 }
 
+function applyPropsToElement(el, props) {
+  Object.keys(props).forEach(k => {
+    const value = props[k]
+    if (isNil(value)) return
+    if (k === "style" && typeof value === "object") {
+      return Object.keys(value).forEach(k => {
+        if (k.startsWith("--")) {
+          el.style.setProperty(k, value[k])
+        } else {
+          el.style[k] = value[k]
+        }
+      })
+    }
+    if (k.startsWith("data-")) {
+      const key = k.replace("data-", "")
+      el.dataset[key] = value
+      return
+    }
+    el[k] = props[k]
+  })
+}
+
+function swapElements(obj1, obj2) {
+  const parent2 = obj2.parentNode;
+  const next2 = obj2.nextSibling;
+  if (next2 === obj1) {
+    parent2.insertBefore(obj1, obj2);
+  } else {
+    obj1.parentNode.insertBefore(obj2, obj1);
+
+    if (next2) {
+      parent2.insertBefore(obj1, next2);
+    } else {
+      parent2.appendChild(obj1);
+    }
+  }
+}
+
+
 const sleep = t => new Promise(r => setTimeout(r, t))
 
-const generateRandomItems = (min, max, size) => {
+const generateRandomNums = (min, max, size) => {
   const res = []
   for (let i = 0; i < size; i += 1) {
     res.push(Math.floor(Math.random() * (max - min + 1) + min))
@@ -19,130 +69,232 @@ const generateRandomItems = (min, max, size) => {
   return res
 }
 
-const LIMIT = 60
-const MIN = 10
-const MAX = 100
 
-const Queue = {
-  $container: $("queue"),
-  items: [],
-  async render(items = this.items, delay, transformer = it => it) {
-    if (delay) {
-      await sleep(delay)
+class Queue {
+  static get color() {
+    return {
+      sorted: "orange",
+      pivot: "yellow",
+      scanned: "darkorchid",
+      current: "crimson",
+      store: "mediumseagreen"
     }
-    this.$container.innerHTML = ""
-    this.$container.append(...items.map((num, i) => transformer(this.create(num, i), i)))
-  },
-  create(num, i) {
-    const $el = $c(num)
-    $el.i = i
-    $el.addEventListener("click", () => {
-      this.remove($el)
+  }
+
+  _LIMIT = 20
+  _MIN = 10
+  _MAX = 100
+
+  $dom
+  _items
+  _duration
+
+  _locked
+
+  constructor(duration) {
+    this._items = []
+    this._locked = false
+    this._createDom()
+    this._duration = duration || 250
+  }
+
+  _createDom() {
+    this.$dom = createElement("div", {
+      className: "queue"
     })
-    return $el
-  },
-  remove($el) {
-    if (!$el || !$el.i) return;
-    alert($el.title)
-    const i = parseInt($el.i)
-    if (!isNaN(i)) {
-      this.items.splice(i, 1)
-      $el.remove()
+  }
+
+  _createItem(num) {
+    if (this._locked) return null
+    if (!this._validate(num)) return null
+    if (this._items.length >= this._LIMIT) {
+      alert(`超出限制个数(${this._LIMIT})`)
+      return null;
     }
-  },
-  validate(num) {
-    if (this.size >= LIMIT) {
-      alert(`超出限制个数(${LIMIT})`)
-      return false;
+
+    const color = ((1 - num / 100) * 200).toFixed(2)
+    const item = {
+      value: num,
+      $dom: createElement("div", {
+        title: num,
+        className: "item",
+        style: {
+          height: `calc(${num}% - 20px)`,
+          '--color': `rgb(${color}, ${color}, ${color})`
+        },
+        onclick: () => {
+          const idx = this._items.findIndex(it => it.$dom === item.$dom)
+          if (idx > -1) {
+            alert(this._items[idx].value)
+            this._destroyItem(idx)
+          }
+        }
+      })
     }
-    if (num < 10) {
-      alert(`数字太小，至少是${MIN}`)
+    return item
+  }
+
+  _destroyItem(idx) {
+    if (this._locked) return
+    const item = this._items.splice(idx, 1)[0]
+    if (item) {
+      item.$dom.remove()
+    }
+  }
+
+  _validate(any) {
+    if (typeof any !== "number" || Number.isNaN(any)) {
+      alert("请输入数字")
       return false
     }
-    if (num > 100) {
-      alert(`数字太大，至多是${MAX}`)
+    if (any < this._MIN) {
+      alert(`数字太小，至少是${this._MIN}`)
+      return false
+    }
+    if (any > this._MAX) {
+      alert(`数字太大，至多是${this._MAX}`)
       return false
     }
     return true
-  },
-  leftIn(num) {
-    if (!this.validate(num)) {
-      return;
-    }
-    this.items.unshift(num)
-    this.render()
-  },
-  rightIn(num) {
-    if (!this.validate(num)) {
-      return;
-    }
-    this.items.push(num)
-    this.render()
-  },
-  leftOut() {
-    const num = this.items.shift()
-    alert(num)
-    this.render()
-  },
-  rightOut() {
-    const num = this.items.pop()
-    alert(num)
-    this.render()
-  },
-  random() {
-    this.items = generateRandomItems(MIN, MAX, 30)
-    this.render()
-  },
-  empty() {
-    this.items = []
-    this.render()
-  },
-  async sort() {
-    await this._qsort(this.items, 0, this.items.length - 1)
-    this.render()
-  },
-  async _qsort(arr, low, high) {
-    const blue = "#4966b9"
-    const yellow = "#c1c32d"
+  }
 
-    const setColor = (i, j, c1, c2) => (it, idx) => {
-      if (idx === i) it.style.backgroundColor = c1
-      else if (idx === j) it.style.backgroundColor = c2
-      return it
-    }
+  _swap(arr, i, j) {
+    let tmp = arr[i]
+    arr[i] = arr[j]
+    arr[j] = tmp
+    
 
-    const swap = async (arr, i, j) => {
-      const tmp = arr[i]
-      arr[i] = arr[j]
-      arr[j] = tmp
-      await this.render(arr, 0, setColor(i, j, yellow, blue))
-    }
+    tmp = this._items[i]
+    this._items[i] = this._items[j]
+    this._items[j] = tmp
 
-    const partition = async (arr, low, high) => {
-      let pivot = arr[high]
-      let i = low - 1
+    swapElements(this._items[i].$dom, this._items[j].$dom)
+    return sleep(this._duration)
+  }
 
-      for (let j = low; j < high; j += 1) {
-        if (arr[j] < pivot) {
-          i += 1
-          await swap(arr, i, j)
-        }
-        await this.render(arr, 200, setColor(i, j, blue, yellow))
+  _setPivot(i) {
+    this._items[i].$dom.classList.add("pivot")
+    return this._items[i].value
+  }
+
+  _setSorted(i) {
+    this._items[i].$dom.classList.add("sorted")
+  }
+
+  async _qsort(low, high) {
+    if (low >= high) return
+    const arr = this.raw()
+
+    const pivot = this._setPivot(high)
+    let i = low
+
+    for (let j = low; j < high; j += 1) {
+      this._items[j].$dom.classList.add("current")
+      await sleep(this._duration)
+      if (arr[j] < pivot) {
+        await this._swap(arr, i, j)
+        this._items[i].$dom.classList.add("store")
+        this._items[i].$dom.classList.remove("current")
+        i += 1
+      } else {
+        this._items[j].$dom.classList.add("scanned")
+        await sleep(this._duration)
+        this._items[j].$dom.classList.remove("current")
       }
-      await swap(arr, i + 1, high)
-      return i + 1
     }
 
-    if (low < high) {
-      const pi = await partition(arr, low, high)
-      await this._qsort(arr, low, pi - 1);
-      await this._qsort(arr, pi + 1, high);
+    await this._swap(arr, i, high)
+    this._setSorted(i)
+
+    for (let j = low; j <= high; j += 1) {
+      this._items[j].$dom.classList.remove("pivot")
+      this._items[j].$dom.classList.remove("store")
+      this._items[j].$dom.classList.remove("scanned")
     }
+
+    await this._qsort(low, i - 1)
+    this._setSorted(low)
+    await this._qsort(i + 1, high)
+    this._setSorted(high)
+    await sleep(this._duration)
+  }
+
+  async sort() {
+    if (this._locked) return
+    this._locked = true
+    await this._qsort(0, this._items.length - 1)
+    this._items.forEach(it => it.$dom.classList.remove("sorted"))
+    this._locked = false
+  }
+
+  push(num) {
+    const item = this._createItem(num)
+    if (item) {
+      this.$dom.appendChild(item.$dom)
+      this._items.push(item)
+    }
+  }
+
+  pop() {
+    this._destroyItem(this.items.length - 1)
+  }
+
+  unshift(num) {
+    const item = this._createItem(num)
+    if (item) {
+      this.$dom.prepend(item.$dom)
+      this._items.unshift(item)
+    }
+  }
+
+  shift() {
+    this._destroyItem(0)
+  }
+
+  empty() {
+    if (this._locked) return
+    this.$dom.innerHTML = ""
+    this._items = []
+  }
+
+  random() {
+    if (this._locked) return
+    this.empty()
+    this._items = generateRandomNums(this._MIN, this._MAX, this._LIMIT)
+      .map(num => this._createItem(num))
+    this._items.forEach(({$dom}) => {
+      this.$dom.appendChild($dom)
+    })
+  }
+
+  setDuration(d) {
+    d = +d
+    if (typeof d !== "number" || Number.isNaN(d)) {
+      throw new TypeError("Invalid duration: " + d)
+    }
+    this._duration = d
+  }
+
+  setLimit(limit) {
+    limit = +limit
+    if (typeof limit !== "number" || Number.isNaN(limit)) {
+      throw new TypeError("Invalid limit: " + limit)
+    }
+    this._LIMIT = limit
+  }
+
+  raw() {
+    return this._items.map(it => it.value)
+  }
+
+  serialize() {
+    return this.raw().join(",")
   }
 }
 
-Queue.random()
+const queue = new Queue()
 
+$("root").appendChild(queue.$dom)
 const $input = $("input")
 const $leftInBtn = $("leftIn")
 const $rightInBtn = $("rightIn")
@@ -151,30 +303,42 @@ const $rightOutBtn = $("rightOut")
 const $sortBtn = $("sort")
 const $emtBtn = $("empty")
 const $randomBtn = $("random")
+const $speed = $("speed")
+const $limit = $("limit")
 
-$leftInBtn.addEventListener("click", () => {
-  if ($input.value !== void 0) {
-    Queue.leftIn($input.value)
+$input.addEventListener("keydown", ev => {
+  if (ev.key === "Enter") {
+    queue.push(ev.target.valueAsNumber)
   }
+})
+$leftInBtn.addEventListener("click", () => {
+  queue.unshift($input.valueAsNumber)
 })
 $rightInBtn.addEventListener("click", () => {
-  if ($input.value !== void 0) {
-    Queue.rightIn($input.value)
-  }
+  queue.push($input.valueAsNumber)
 }) 
 $leftOutBtn.addEventListener("click", () => {
-  Queue.leftOut()
+  queue.shift()
 })
 $rightOutBtn.addEventListener("click", () => {
-  Queue.rightOut()
+  queue.pop()
 })
 $sortBtn.addEventListener("click", () => {
-  Queue.sort()
+  queue.sort()
 })
 $emtBtn.addEventListener("click", () => {
-  Queue.empty()
+  queue.empty()
 })
 $randomBtn.addEventListener("click", () => {
-  Queue.random()
+  queue.random()
+})
+$speed.addEventListener("change", () => {
+  queue.setDuration($speed.value)
+})
+$limit.addEventListener("change", () => {
+  queue.setLimit($limit.value)
 })
 
+queue.setDuration($speed.value)
+queue.setLimit($limit.value)
+queue.random()

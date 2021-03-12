@@ -17,7 +17,7 @@
 - [23 Javascript和树（二）「重构」](./src/2016/23/)
 - [22 Javascript和树（一）「重构」](./src/2016/22/)
 - [20 基础JavaScript练习（三）](./src/2016/20/)
-- [19 基础JavaScript练习（二）](./src/2016/19/)
+- [19 基础JavaScript练习（二）「重构」](./src/2016/19/)
 - [18 基础JavaScript练习（一）](./src/2016/18/)
 - [17 零基础JavaScript编码（五）](./src/2016/17/)
 - [16 零基础JavaScript编码（四）](./src/2016/16/)
