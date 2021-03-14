@@ -4,7 +4,7 @@
 ## demo: [在线演示](https://evls-practices.github.io/IFE/src/2016/36/index.html)
 ## [ife 链接](http://ife.baidu.com/2016/task/detail?taskId=36)
 
-![](./screenshot.jpg)
+![](./screenshot.png)
 
 <dl>
 	<dt>面向人群：</dt>

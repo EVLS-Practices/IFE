@@ -98,7 +98,7 @@ export class App {
     if (files && files.length > 0) {
       const data = await readImage(files[0], ...this._grid.size)
       this._reset()
-      const inputs = ["MOV TO 0,1", "TUN BAC"]
+      const inputs = ["MOV TO 0,1", "TUN NOR"]
 
       const everythingButLastRow = initial(data)
 

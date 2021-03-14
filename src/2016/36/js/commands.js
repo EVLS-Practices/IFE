@@ -23,6 +23,30 @@ export const commands = {
     desc: "旋转 180 deg",
   },
 
+  turnNorth: {
+    id: "TUN NOR",
+    pattern: /^TUN\sNOR$/i,
+    desc: "向北旋转"
+  },
+
+  turnSouth: {
+    id: "TUN SOU",
+    pattern: /^TUN\sSOU$/i,
+    desc: "向南旋转"
+  },
+
+  turnEast: {
+    id: "TUN EAS",
+    pattern: /^TUN\sEAS$/i,
+    desc: "向东旋转"
+  },
+
+  turnWest: {
+    id: "TUN WST",
+    pattern: /^TUN\sWST$/i,
+    desc: "向西旋转"
+  },
+
   translateWest: {
     id: "TRA LEF $NUM",
     pattern: /^TRA\sLEF\s?(\d+)?$/i,
